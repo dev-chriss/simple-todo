@@ -1,0 +1,19 @@
+# Mac OS
+#
+.DS_Store
+
+# Node
+#
+node_modules
+
+# Expo
+#
+.expo
+
+# Jest
+#
+coverage
+
+web-build
+
+.env
