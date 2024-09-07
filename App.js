@@ -76,6 +76,9 @@ const App = () => {
         }
     }, [filter])
 
+    useEffect(() => {
+        storeData()
+    }, [tasks])
 
     const storeData = async () => {
         try {
@@ -101,7 +104,6 @@ const App = () => {
                 setTasks(updatedTasks);
                 setFilteredTasks(updatedFilteredTasks);
                 setEditItem(null)
-                storeData();
             } else {
                 // Add new task
                 const updatedTasks = [...tasks, {isCompleted: false, name: taskName }];
@@ -109,7 +111,6 @@ const App = () => {
 
                 setTasks(updatedTasks);
                 setFilteredTasks(updatedFilteredTasks);
-                storeData();
             }
             setTaskName("");
         }
@@ -123,11 +124,10 @@ const App = () => {
 
     const handleDeleteTask = (index, item) => {
         const updatedTasks =  tasks.filter((data)=> data.name !== item.name );
-        const updatedFilteredTasks =  tasks.filter((data)=> data.name !== item.name );
+        const updatedFilteredTasks =  filteredTasks.filter((data)=> data.name !== item.name );
 
         setTasks(updatedTasks);
         setFilteredTasks(updatedFilteredTasks);
-        storeData()
     };
 
     const renderItem = ({ index, item }) => (
@@ -146,7 +146,7 @@ const App = () => {
                         
                         setTasks(updatedTasks)
                         setFilteredTasks(updatedFilteredTasks);
-                        return storeData()
+                        return
                     }}
                     style={styles.checkbox}
                 />
