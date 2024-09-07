@@ -8,7 +8,7 @@ ToDo App with Expo
 npm install
 ```
 
-2. Open android emulator if needed
+2. Open android emulator manually if needed
 
 3. Run the application
 
