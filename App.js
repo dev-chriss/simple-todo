@@ -267,6 +267,7 @@ const styles = StyleSheet.create({
     },
     itemList: {
         flexGrow: 1,
+        maxWidth: "70%",
         marginHorizontal: 10,
         // border: 1,
         // borderWidth: 1
@@ -277,6 +278,7 @@ const styles = StyleSheet.create({
     },
     taskButtons: {
         flexDirection: "row",
+        width: "25%"
     },
     editButton: {
         marginRight: 10,
@@ -291,6 +293,7 @@ const styles = StyleSheet.create({
     },
     checkboxContainer: {
         flexDirection: 'row',
+        width: "5%"
     },
     checkbox: {
         alignSelf: "center"
