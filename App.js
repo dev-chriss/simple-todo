@@ -106,8 +106,8 @@ const App = () => {
                 setEditItem(null)
             } else {
                 // Add new task
-                const updatedTasks = [...tasks, {isCompleted: false, name: taskName }];
-                const updatedFilteredTasks = [...filteredTasks, {isCompleted: false, name: taskName }];
+                const updatedTasks = [...tasks, {name: taskName , isCompleted: false }];
+                const updatedFilteredTasks = [...filteredTasks, {name: taskName , isCompleted: false }];
 
                 setTasks(updatedTasks);
                 setFilteredTasks(updatedFilteredTasks);
