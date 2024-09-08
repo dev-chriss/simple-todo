@@ -22,10 +22,10 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import ToastManager, { Toast } from "expo-react-native-toastify";
 
 const App = () => {
-    // tasks is complete data without filtering, use for saving data to local storage
+    // completed data without filtering, used for saving to local storage
     const [tasks, setTasks] = useState([]);
 
-    // filtered Task is filtered data, use for display to UI
+    // filtered data, used for display to UI
     const [filteredTasks, setFilteredTasks] = useState([]);
 
     const [taskName, setTaskName] = useState("");
@@ -72,6 +72,8 @@ const App = () => {
                 })
                 setFilteredTasks(filteredTasks)
             }
+            setEditItem(null);
+            setTaskName("");
             filterData();
         }
     }, [filter])
@@ -103,7 +105,7 @@ const App = () => {
 
                 setTasks(updatedTasks);
                 setFilteredTasks(updatedFilteredTasks);
-                setEditItem(null)
+                setEditItem(null);
             } else {
                 // Add new task
                 const updatedTasks = [...tasks, {name: taskName , isCompleted: false }];
@@ -128,6 +130,8 @@ const App = () => {
 
         setTasks(updatedTasks);
         setFilteredTasks(updatedFilteredTasks);
+        setEditItem(null);
+        setTaskName("");
     };
 
     const renderItem = ({ index, item }) => (
@@ -146,6 +150,8 @@ const App = () => {
                         
                         setTasks(updatedTasks)
                         setFilteredTasks(updatedFilteredTasks);
+                        setEditItem(null);
+                        setTaskName("");
                         return
                     }}
                     style={styles.checkbox}
