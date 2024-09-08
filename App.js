@@ -21,6 +21,9 @@ import { Provider as PaperProvider } from 'react-native-paper';
 // toast/popup message
 import ToastManager, { Toast } from "expo-react-native-toastify";
 
+// confirm dialog
+import { ConfirmDialog } from 'react-native-simple-dialogs';
+
 const App = () => {
     // completed data without filtering, used for saving to local storage
     const [tasks, setTasks] = useState([]);
@@ -28,6 +31,8 @@ const App = () => {
     // filtered data, used for display to UI
     const [filteredTasks, setFilteredTasks] = useState([]);
 
+    const [showDialog, setShowDialog] = useState(false);
+    const [deleteItem, setDeleteItem] = useState(null);
     const [taskName, setTaskName] = useState("");
     const [editItem, setEditItem] = useState(null);
     const [filter, setFilter] = useState("all")
@@ -118,10 +123,10 @@ const App = () => {
         }
     };
 
-    const handleEditTask = (index, item) => {
+    const handleEditTask = (item) => {
         // setTaskName(filteredTasks[index].name);
         setTaskName(item.name);
-        setEditItem(item)
+        setEditItem(item);
     };
 
     const handleCancelTask = () => {
@@ -129,14 +134,26 @@ const App = () => {
         setTaskName("");
     }
 
-    const handleDeleteTask = (index, item) => {
-        const updatedTasks =  tasks.filter((data)=> data.name !== item.name );
-        const updatedFilteredTasks =  filteredTasks.filter((data)=> data.name !== item.name );
+    const handleDeleteTask = (item) => {
+        // if not edit mode
+        // if (editItem === null) {
+            setDeleteItem(item);
+            setShowDialog(true);
+        // }
+    };
 
-        setTasks(updatedTasks);
-        setFilteredTasks(updatedFilteredTasks);
-        setEditItem(null);
-        setTaskName("");
+    const deleteTask = () => {
+        if (deleteItem !== null) {
+            const updatedTasks =  tasks.filter((data)=> data.name !== deleteItem.name );
+            const updatedFilteredTasks =  filteredTasks.filter((data)=> data.name !== deleteItem.name );
+
+            setTasks(updatedTasks);
+            setFilteredTasks(updatedFilteredTasks);
+            setEditItem(null);
+            setTaskName("");
+            setDeleteItem(null);
+        }
+        setShowDialog(false);
     };
 
     const renderItem = ({ index, item }) => (
@@ -144,6 +161,7 @@ const App = () => {
             
             <View style={styles.checkboxContainer}>
                 <CheckBox
+                    disabled={editItem !== null}
                     value={item.isCompleted}
                     onValueChange={(value) => {
                         const updatedTasks = tasks.map(obj =>
@@ -165,20 +183,25 @@ const App = () => {
             </View>
 
             <View style={styles.itemList}
-                ><Text style={styles.textNote}>{item.name}</Text>
+                ><Text style={item.isCompleted ? styles.textNoteComplete : styles.textNote}>{item.name}</Text>
             </View>
             
-            <View
-                style={styles.taskButtons}>
+            <View style={styles.taskButtons}>
                 <TouchableOpacity
-                    onPress={() => handleEditTask(index, item)}>
+                    disabled={editItem !== null}
+                    onPress={() => handleEditTask(item)}>
                     <Text
-                        style={styles.editButton}>Edit</Text>
+                        style={editItem !== null ? styles.disabledButton : styles.editButton}>
+                            Edit
+                    </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => handleDeleteTask(index, item)}>
+                    disabled={editItem !== null}
+                    onPress={() => handleDeleteTask(item)}>
                     <Text
-                        style={styles.deleteButton}>Delete</Text>
+                        style={editItem !== null ? styles.disabledButton : styles.deleteButton}>
+                            Delete
+                    </Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -187,6 +210,24 @@ const App = () => {
     return (
             <PaperProvider>
                 <ToastManager />
+
+                <ConfirmDialog
+                    title="Confirm Dialog"
+                    message="Are you sure want to delete?"
+                    visible={showDialog}
+                    onTouchOutside={() => setShowDialog(false)}
+                    positiveButton={{
+                        title: "YES",
+                        onPress: () => {
+                            deleteTask()
+                        }
+                    }}
+                    negativeButton={{
+                        title: "NO",
+                        onPress: () => setShowDialog(false)
+                    }}
+                />
+
                 <View style={styles.container}>
                     <Text style={styles.title}>Simple ToDo App</Text>
                     <TextInput
@@ -208,7 +249,9 @@ const App = () => {
                         <TouchableOpacity
                             style={styles.cancelButton}
                             onPress={handleCancelTask}>
-                            <Text style={styles.addButtonText}> Cancel </Text>
+                            <Text style={styles.addButtonText}> 
+                                {editItem !== null ? "Cancel" : "Clear"}
+                            </Text>
                         </TouchableOpacity>
                     </View>
 
@@ -216,6 +259,7 @@ const App = () => {
 
                     <View style={styles.dropdownContainer}>
                         <Dropdown
+                            disabled={editItem !== null}
                             label="Select Options..."
                             placeholder="Select Filter"
                             options={OPTIONS}
@@ -308,13 +352,19 @@ const styles = StyleSheet.create({
 
     textNote: {
         fontSize: 14,
+        textDecorationLine: "none"
+    },
+    textNoteComplete: {
+        textDecorationLine: "line-through"
     },
     taskButtons: {
         flexDirection: "row",
-        width: "25%"
+        width: "25%",
+        justifyContent: "space-around",
+        alignItems: "center",
     },
     editButton: {
-        marginRight: 10,
+        // marginRight: 10,
         color: "green",
         fontWeight: "bold",
         fontSize: 14,
@@ -323,6 +373,9 @@ const styles = StyleSheet.create({
         color: "red",
         fontWeight: "bold",
         fontSize: 14,
+    },
+    disabledDeleteButton: {
+        color: "#ccc",
     },
     checkboxContainer: {
         flexDirection: 'row',
@@ -333,7 +386,8 @@ const styles = StyleSheet.create({
     },
     label: {
         margin: 8,
-        textAlign: "left"
+        textAlign: "left",
+        
     },
     dropdownContainer: {
         backgroundColor: "#fff",
