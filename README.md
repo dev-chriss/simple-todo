@@ -25,4 +25,3 @@ npm start
 ## Screenshots
 
 ![Alt text](./assets/screenshoot1.png)
-![Alt text](./assets/screenshoot2.png)
