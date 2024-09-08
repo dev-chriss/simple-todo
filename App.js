@@ -124,6 +124,11 @@ const App = () => {
         setEditItem(item)
     };
 
+    const handleCancelTask = () => {
+        setEditItem(null);
+        setTaskName("");
+    }
+
     const handleDeleteTask = (index, item) => {
         const updatedTasks =  tasks.filter((data)=> data.name !== item.name );
         const updatedFilteredTasks =  filteredTasks.filter((data)=> data.name !== item.name );
@@ -190,14 +195,22 @@ const App = () => {
                         value={taskName}
                         onChangeText={(text) => setTaskName(text)}
                     />
-                    
-                    <TouchableOpacity
-                        style={styles.addButton}
-                        onPress={handleAddTask}>
-                        <Text style={styles.addButtonText}>
-                            {editItem !== null ? "Update Task" : "Add Task"}
-                        </Text>
-                    </TouchableOpacity>
+
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            style={styles.addButton}
+                            onPress={handleAddTask}>
+                            <Text style={styles.addButtonText}>
+                                {editItem !== null ? "Update Task" : "Add Task"}
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.cancelButton}
+                            onPress={handleCancelTask}>
+                            <Text style={styles.addButtonText}> Cancel </Text>
+                        </TouchableOpacity>
+                    </View>
 
                     <View style={styles.line} />
 
@@ -242,23 +255,35 @@ const styles = StyleSheet.create({
     input: {
         borderWidth: 3,
         borderColor: "#ccc",
-        padding: 10,
+        paddingVertical: 5,
+        paddingHorizontal: 12,
         marginBottom: 10,
         borderRadius: 10,
-        fontSize: 18,
+        fontSize: 14,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        marginTop: 5,
+        marginBottom: 20,
     },
     addButton: {
         backgroundColor: "green",
+        width: "45%",
         padding: 10,
         borderRadius: 5,
-        marginTop: 5,
-        marginBottom: 20,
     },
     addButtonText: {
         color: "white",
         fontWeight: "bold",
         textAlign: "center",
-        fontSize: 18,
+    },
+    cancelButton: {
+        backgroundColor: "green",
+        width: "45%",
+        padding: 10,
+        borderRadius: 5,
     },
     line: {
         borderBottomColor: 'black',
@@ -270,7 +295,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         marginBottom: 15,
-        fontSize: 14,
         // border: 1,
         // borderWidth: 1
     },
@@ -313,9 +337,11 @@ const styles = StyleSheet.create({
     },
     dropdownContainer: {
         backgroundColor: "#fff",
-        marginVertical: 20
+        marginVertical: 20,
+        fontSize: 14,
     },
     selectOption: {
+        fontSize: 14,
         color: "#000"
     }
 });
