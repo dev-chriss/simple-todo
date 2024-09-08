@@ -190,6 +190,7 @@ const App = () => {
                         value={taskName}
                         onChangeText={(text) => setTaskName(text)}
                     />
+                    
                     <TouchableOpacity
                         style={styles.addButton}
                         onPress={handleAddTask}>
@@ -250,6 +251,7 @@ const styles = StyleSheet.create({
         backgroundColor: "green",
         padding: 10,
         borderRadius: 5,
+        marginTop: 5,
         marginBottom: 20,
     },
     addButtonText: {
