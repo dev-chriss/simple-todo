@@ -207,6 +207,7 @@ const App = () => {
                             options={OPTIONS}
                             value={filter}
                             onSelect={setFilter}
+                            mode="outlined"
                         />
                     </View>
 
